@@ -1,0 +1,59 @@
+code {
+maquina1 := /*
+#Comentario que será copiado al archivo final
+import miscosas;
+
+def dibujar():
+  print("Hello World")
+*/
+
+maquina2 := /*
+def metodo2():
+  print("Comportamiento 2")
+*/
+
+}
+
+behaviours {
+c1 := /*
+dibujar()
+*/
+
+c2 :=/*
+print("Esto es el comportamiento 2")
+*/
+
+c3 := /*
+metodo2()
+*/
+}
+
+events {
+    event1 := (a, b, c);
+    event2 := (a, b);
+    event3 := (1);
+    event4 := (1,12);
+}
+
+main {
+
+    #Comentario ejemplo
+
+    '''
+    Comentario
+    Multilinea
+    '''
+
+    moore maquina1 {
+      states e1, e2, e3, e4;
+      output  (e1,c1), (e2, c2), (e3, c2), (e4, c1);
+      transitions (e1, e2, event1), (e2, e3, event2);
+    }
+
+    moore maquina2 {
+        states q1, q2, q3;
+        output (q1, c1), (q2, c2), (q3, c3);
+        transitions (q1, q2, event3), (q1, q3, event4);
+    }
+
+}

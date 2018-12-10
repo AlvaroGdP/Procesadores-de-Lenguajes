@@ -1,0 +1,108 @@
+
+/* ----------------------Seccion de declaraciones package e imports--------------------*/
+
+import java_cup.runtime.*;
+import java.io.*;
+
+
+
+/* ----------------------Seccion componentes de codigo de usuario --------------------*/
+
+parser code {:
+
+	static boolean do_debug_parse = false;
+
+	public static void main(String args[]) {
+
+		try{
+			FileReader fr = new FileReader(args[0]);
+
+			if(do_debug_parse){
+				new parser(new analex_cup(fr)).debug_parse();
+			}else{
+				new parser(new analex_cup(fr)).parse();
+			}
+
+		}catch (FileNotFoundException e) {
+			System.out.println("Archivo '"+ args[0]+"' no encontrado");
+			System.exit(1);
+    }catch (Exception e){
+			System.exit(1);
+		}
+    System.out.println("Análisis correcto");
+ 	}
+
+
+	/* Metodo invocado por cup */
+	public void report_error(String message, Object info) {
+		 StringBuilder m = new StringBuilder("Error");
+		 if (info instanceof java_cup.runtime.Symbol) {
+				 java_cup.runtime.Symbol s = ((java_cup.runtime.Symbol) info);
+				 if (s.left >= 0) {
+						 m.append(" en linea "+(s.left+1));
+						 if (s.right >= 0)
+								 m.append(", columna "+(s.right+1));
+				 }
+		 }
+		 m.append(" : "+message);
+		 System.err.println(m);
+ }
+
+
+/* Metodo invocado por cup */
+ @Override
+ public void report_fatal_error(String message, Object info) throws java.lang.Exception {
+	System.out.println("Error fatal. Imposible recuperarse y continuar ejecución.");
+	System.exit(1);
+ }
+
+:}
+
+
+
+/* ------------Declaracion de la lista de simbolos de la gramatica-----------*/
+
+terminal CODE_TOKEN, CODIGO, BEHAVIOURS, LLAVE_I, LLAVE_D, PAR_I, PAR_D, ID, ASIGNACION, EVENTS;
+terminal ENTRADA, PUNTO_COMA, COMA, MAIN, MOORE, STATES, TRANSITIONS, OUTPUT;
+
+non terminal programa, bloque_code, codigo, comportamientos, comportamiento, eventos, evento, valor;
+non terminal cuerpo, maquinas, maquina, cuerpo_maquina, estados, transiciones, salidas;
+non terminal estado, transicion, salida, tripla_transicion, tupla_salida, codigo_individual;
+
+
+
+/* -------------Declaracion de precedencias -----------*/
+
+
+
+/* --------------Declaracion de la gramatica -----------*/
+
+programa ::= bloque_code comportamientos eventos MAIN LLAVE_I cuerpo LLAVE_D;
+
+bloque_code ::= CODE_TOKEN LLAVE_I codigo LLAVE_D;
+codigo ::= codigo_individual | codigo_individual codigo;
+codigo_individual ::= ID ASIGNACION CODIGO;
+
+comportamientos ::= BEHAVIOURS LLAVE_I comportamiento LLAVE_D;
+comportamiento ::= codigo_individual | ID ASIGNACION CODIGO comportamiento;
+
+eventos ::= EVENTS LLAVE_I evento LLAVE_D;
+evento ::= ID ASIGNACION PAR_I valor PAR_D PUNTO_COMA | ID ASIGNACION PAR_I valor PAR_D PUNTO_COMA evento;
+valor ::= ENTRADA | ENTRADA COMA valor;
+
+cuerpo ::= maquinas;
+
+maquinas ::= maquina | maquina maquinas;
+maquina ::= MOORE ID LLAVE_I cuerpo_maquina LLAVE_D;
+cuerpo_maquina ::= estados salidas transiciones;
+
+estados ::= STATES estado PUNTO_COMA;
+estado ::= ID | ID COMA estado;
+
+salidas ::= OUTPUT salida PUNTO_COMA;
+salida ::= PAR_I tupla_salida PAR_D | PAR_I tupla_salida PAR_D COMA salida;
+tupla_salida ::= ID COMA ID;
+
+transiciones ::= TRANSITIONS transicion PUNTO_COMA;
+transicion ::= PAR_I tripla_transicion PAR_D | PAR_I tripla_transicion PAR_D COMA transicion;
+tripla_transicion ::= ID COMA ID COMA ID;
