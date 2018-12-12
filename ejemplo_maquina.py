@@ -1,7 +1,7 @@
 # Sección código-usuario #############
 
 # Comentario que será copiado al archivo final
-#import miscosas;
+import miscosas;
 
 def dibujar():
   print("Hello World")
@@ -16,7 +16,7 @@ def procesar_entrada(str):
     for elem in splitted:
         # Eliminamos espacios iniciales. Esto evita errores cuando el usuario ha introducido espacios
         # tras comas para una mejor visualización (Ej: a, b, c --> a,b,c)
-        if elem[0] == " ":
+        if elem[0] == " " or elem[0]=="\t":
             elem = elem[1:]
         cpy.append(elem)
     return cpy
@@ -59,7 +59,6 @@ print("-----\n")
 
 while True:
     # Obtenemos la entrada, que se almacena literalmente como una cadena, NO como lista
-    # Por ello, el usuario NO debe introducir '()', '[]', '{}' a no ser que desee que sean interpretados como parte de la entrada
     entrada = input("Introduce la entrada para realizar la transicion: ")
     entrada = procesar_entrada(entrada)
     estado_actual = transition(estado_actual, entrada)
