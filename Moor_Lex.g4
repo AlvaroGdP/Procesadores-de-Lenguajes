@@ -2,7 +2,6 @@ lexer grammar Moor_Lex;
 
 CODE_TOKEN :'code';
 BEHAVIOURS : 'behaviours';
-MAIN : 'main';
 EVENTS : 'events' -> pushMode(BLOQUE_EVENTOS);
 MOORE : 'moore';
 STATES : 'states';
