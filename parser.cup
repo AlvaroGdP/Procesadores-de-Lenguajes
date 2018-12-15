@@ -63,7 +63,7 @@ parser code {:
 /* ------------Declaracion de la lista de simbolos de la gramatica-----------*/
 
 terminal CODE_TOKEN, CODIGO, BEHAVIOURS, LLAVE_I, LLAVE_D, PAR_I, PAR_D, ID, ASIGNACION, EVENTS;
-terminal ENTRADA, PUNTO_COMA, COMA, MAIN, MOORE, STATES, TRANSITIONS, OUTPUT;
+terminal ENTRADA, PUNTO_COMA, COMA, MOORE, STATES, TRANSITIONS, OUTPUT;
 
 non terminal programa, bloque_code, codigo, comportamientos, comportamiento, eventos, evento, valor;
 non terminal cuerpo, maquinas, maquina, cuerpo_maquina, estados, transiciones, salidas;
@@ -77,7 +77,7 @@ non terminal estado, transicion, salida, tripla_transicion, tupla_salida, codigo
 
 /* --------------Declaracion de la gramatica -----------*/
 
-programa ::= bloque_code comportamientos eventos MAIN LLAVE_I cuerpo LLAVE_D;
+programa ::= bloque_code comportamientos eventos cuerpo;
 
 bloque_code ::= CODE_TOKEN LLAVE_I codigo LLAVE_D;
 codigo ::= codigo_individual | codigo_individual codigo;

@@ -55,7 +55,6 @@ TAB =  \t
   "behaviours"        {return symbol(sym.BEHAVIOURS);}
   "code"              {return symbol(sym.CODE_TOKEN);}
   "events"            {yybegin(BLOQUE_EVENTOS); return symbol(sym.EVENTS);}
-  "main"              {return symbol(sym.MAIN);}
   "states"            {return symbol(sym.STATES);}
   "transitions"       {return symbol(sym.TRANSITIONS);}
   "output"            {return symbol(sym.OUTPUT);}
