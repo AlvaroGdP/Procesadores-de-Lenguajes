@@ -116,7 +116,7 @@ action code{:
 
 		// procesar_entrada
 		writer.println("\nimport sys\ndef procesar_entrada(str):\n\tsplitted = str.split(',')\n\tcpy = []");
-		writer.println("\tfor elem in splitted:\n\t\tif elem[0] == ' ' or elem[0] == '\t':\n\t\t\telem = elem[1:]");
+		writer.println("\tfor elem in splitted:\n\t\telem = elem.replace('\\t', '')\n\t\telem = elem.replace(' ', '')");
 		writer.println("\t\tcpy.append(elem)\n\treturn cpy\n\n");
 	}
 
@@ -154,7 +154,6 @@ action code{:
 	}
 
 	public String procesar_entrada(String entrada){
-		entrada = entrada.replace(", ", ",");
 		String splitted[] = entrada.split(",");
 		String entradas = "[";
 		for (String elem: splitted){
@@ -197,7 +196,7 @@ eventos ::= EVENTS LLAVE_I evento LLAVE_D;
 evento ::= ID:id ASIGNACION PAR_I valor:r PAR_D PUNTO_COMA {: eventos_table.put(id+"", r+"");:}
 		| ID:id ASIGNACION PAR_I valor:r PAR_D PUNTO_COMA evento {: eventos_table.put(id+"", r+"");:};
 valor ::= ENTRADA:en {:RESULT = en; :}
-		| ENTRADA:en COMA valor:r {:RESULT = en+", "+r; :};
+		| ENTRADA:en COMA valor:r {:RESULT = en+","+r; :};
 
 cuerpo ::= maquinas;
 

@@ -14,10 +14,10 @@ def procesar_entrada(str):
     splitted = str.split(",")
     cpy = []
     for elem in splitted:
-        # Eliminamos espacios iniciales. Esto evita errores cuando el usuario ha introducido espacios
+        # Eliminamos espacios y tabuladores. Esto evita errores cuando el usuario ha introducido espacios
         # tras comas para una mejor visualización (Ej: a, b, c --> a,b,c)
-        if elem[0] == " " or elem[0] == "\t":
-            elem = elem[1:]
+        elem = elem.replace("\t", "")
+        elem = elem.replace(" ", "")
         cpy.append(elem)
     return cpy
 
