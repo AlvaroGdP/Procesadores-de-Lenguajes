@@ -50,18 +50,22 @@ def transition(estado, entrada):
         sys.exit(0)
 
 
-# Estado inicial
-estado_actual = "e1"
+def main():
+    # Estado inicial
+    estado_actual = "e1"
 
-print("\nEstado actual: "+ estado_actual+".")
-output(estado_actual)
-print("-----\n")
-
-while True:
-    # Obtenemos la entrada, que se almacena literalmente como una cadena, NO como lista
-    entrada = input("Introduce la entrada para realizar la transicion: ")
-    entrada = procesar_entrada(entrada)
-    estado_actual = transition(estado_actual, entrada)
-    print("Estado actual: "+ estado_actual+".")
+    print("\nEstado actual: "+ estado_actual+".")
     output(estado_actual)
     print("-----\n")
+
+    while True:
+        # Obtenemos la entrada, que se almacena literalmente como una cadena, NO como lista
+        entrada = input("Introduce la entrada para realizar la transicion: ")
+        entrada = procesar_entrada(entrada)
+        estado_actual = transition(estado_actual, entrada)
+        print("Estado actual: "+ estado_actual+".")
+        output(estado_actual)
+        print("-----\n")
+
+if __name__ == '__main__':
+    main()

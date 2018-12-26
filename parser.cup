@@ -31,7 +31,6 @@ parser code {:
     }catch (Exception e){
 			System.exit(1);
 		}
-    System.out.println("Análisis correcto");
  	}
 
 
@@ -71,98 +70,16 @@ action code{:
 	protected void escribir(){
 		if (!error){
 			Enumeration<String> claves = maquinas.keys();
+			MiWriter mw = new MiWriter();
 			while(claves.hasMoreElements()){
 				String actual = claves.nextElement();
-				String nombre_archivo = actual+".py";
-				PrintWriter writer = null;
-				try{
-					writer = new PrintWriter(nombre_archivo, "UTF-8");
-				}catch (FileNotFoundException fnf){
-					//
-				}catch (Exception e){
-					System.out.println("Exception desconocida: "+ e.getMessage());
+				error = mw.comprobaciones(actual, maquinas.get(actual), eventos_table, codigo_table);
+				if (!error){
+					mw.write(actual, maquinas.get(actual), eventos_table, codigo_table);
 				}
-				write_cabecera(writer, actual);
-				write_output(writer, actual);
-
-
-				// Transiciones
-				writer.println("\n\ndef transition(estado, entrada):");
-				String linea = "\tif estado ==";
-				LinkedList<String[]> transiciones = maquinas.get(actual).getTransiciones();
-				int index = 0;
-				String estado_inicio = transiciones.get(index)[0];
-				String estado_destino = transiciones.get(index)[1];
-				String entrada_id = transiciones.get(index)[2];
-				linea = linea + "'"+estado_inicio+"'  and entrada == ";
-				String entrada = eventos_table.get(entrada_id);
-				entrada = procesar_entrada(entrada);
-				linea = linea + entrada +":";
-				writer.println(linea);
-				writer.println("\t\tnuevo_estado = '"+estado_destino+"'\n\t\tprint('[Transicion]\\n\\t' + estado + ', '+ str(entrada) + ' ----> ' + nuevo_estado+'\\n')\n\t\treturn nuevo_estado");
-				writer.flush();
+				error = false;
 			}
-			System.out.println(claves.nextElement());
 		}
-	}
-
-	public void write_cabecera(PrintWriter writer, String actual){
-		// Codigo usuario
-		writer.println("# Sección código-usuario #############");
-		String codigo = codigo_table.get(actual);
-		codigo = codigo.substring(2, codigo.length()-2);
-		writer.println(codigo);
-		writer.println("######################################");
-
-		// procesar_entrada
-		writer.println("\nimport sys\ndef procesar_entrada(str):\n\tsplitted = str.split(',')\n\tcpy = []");
-		writer.println("\tfor elem in splitted:\n\t\telem = elem.replace('\\t', '')\n\t\telem = elem.replace(' ', '')");
-		writer.println("\t\tcpy.append(elem)\n\treturn cpy\n\n");
-	}
-
-	public void write_output(PrintWriter writer, String actual){
-		// output
-		writer.println("def output(estado):");
-		Hashtable<String, String> outputs = maquinas.get(actual).getSalidas();
-		Enumeration<String> estados = outputs.keys();
-		String estado_actual = estados.nextElement();
-		String linea = "\tif estado == "+"'"+estado_actual+"':";
-		writer.println(linea);
-		String comp_id = maquinas.get(actual).getSalidas().get(estado_actual);
-
-		// Debemos procesar linea a linea de codigo
-		String codigo = codigo_table.get(comp_id);
-		codigo = procesar_codigo(codigo);
-		writer.println(codigo);
-
-		while (estados.hasMoreElements()){
-			estado_actual = estados.nextElement();
-			linea = "\telif estado == "+"'"+estado_actual+"':";
-			writer.println(linea);
-			comp_id = maquinas.get(actual).getSalidas().get(estado_actual);
-			codigo = codigo_table.get(comp_id);
-			codigo = procesar_codigo(codigo);
-			writer.println(codigo);
-		}
-		writer.println("\telse:\n\t\tprint('Comportamiento indefinido para el estado '+estado+'. Abortando ejecución.')\n\t\tsys.exit(0)");
-	}
-
-	public String procesar_codigo(String codigo){
-		codigo = codigo.substring(2, codigo.length()-2);
-		codigo = codigo.replace("\n", "\n\t\t");
-		return codigo;
-	}
-
-	public String procesar_entrada(String entrada){
-		String splitted[] = entrada.split(",");
-		String entradas = "[";
-		for (String elem: splitted){
-			entradas = entradas + "'"+elem+"', ";
-		}
-		entradas = entradas.substring(0, entradas.length()-2);
-		entradas = entradas + "]";
-		System.out.println(entradas);
-		return entrada;
 	}
 
 :}
