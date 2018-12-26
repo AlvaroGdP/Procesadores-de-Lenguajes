@@ -139,7 +139,11 @@ public class MiWriter {
     codigo = codigo.replace("/*\n", "");
     codigo = codigo.replace("/*", "");
     codigo = codigo.replace("*/", "");
-    codigo = "\t\t"+codigo;
+    String[] splitted = codigo.split("\n");
+    codigo = "";
+    for (String elem: splitted){
+      codigo = codigo+"\t\t"+elem+"\n";
+    }
     return codigo;
   }
 
