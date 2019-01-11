@@ -1,7 +1,7 @@
 parser grammar Moor_Syn;
 options {tokenVocab = Moor_Lex;}
 
-programa : (bloque_code comportamientos eventos cuerpo);
+programa : bloque_code comportamientos eventos cuerpo;
 
 bloque_code : (CODE_TOKEN LLAVE_I codigo_bloque LLAVE_D);
 codigo_bloque : (codigo_individual codigo_bloque | codigo_individual);
@@ -16,7 +16,7 @@ valor : ENTRADA | ENTRADA COMA valor;
 
 cuerpo : maquinas;
 
-maquinas : maquina | maquina maquinas;
+maquinas : maquina maquinas | maquina;
 maquina : MOORE ID LLAVE_I cuerpo_maquina LLAVE_D;
 cuerpo_maquina : estados salidas transiciones;
 

@@ -43,7 +43,7 @@ moore maquina1 {
   transitions (e1, e2, event1), (e2, e3, event2);
 }
 
- maquina2 {
+moore maquina2 {
   states q1, q2, q3;
   output (q1, c1), (q2, c2), (q3, c3);
   transitions (q1, q2, event3), (q1, q3, event4);
