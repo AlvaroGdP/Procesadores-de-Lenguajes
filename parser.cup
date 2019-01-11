@@ -102,36 +102,56 @@ non terminal estado, transicion, salida, tripla_transicion, tupla_salida, codigo
 
 /* --------------Declaracion de la gramatica -----------*/
 
-programa ::= bloque_code comportamientos eventos cuerpo {: escribir(); :};
+programa ::= bloque_code comportamientos eventos cuerpo {: escribir(); :}
+		| error {: System.out.println("ERROR Sintactico. Posible causa: bloque no delimitado por '{'"); error=true; :};
 
-bloque_code ::= CODE_TOKEN LLAVE_I codigo LLAVE_D;
+bloque_code ::= CODE_TOKEN LLAVE_I codigo LLAVE_D | CODE_TOKEN LLAVE_I LLAVE_D
+		| ;
 codigo ::= codigo_individual | codigo_individual codigo;
-codigo_individual ::= ID:id ASIGNACION CODIGO:code {: codigo_table.put(id+"", code+""); :};
-comportamientos ::= BEHAVIOURS LLAVE_I codigo LLAVE_D;
+codigo_individual ::= ID:id ASIGNACION CODIGO:code {: codigo_table.put(id+"", code+""); :}
+		| error {: System.err.println("ERROR en declaración de código de usuario (bloques 'code' o 'behaviours')."); error=true; :};
 
-eventos ::= EVENTS LLAVE_I evento LLAVE_D;
+comportamientos ::= BEHAVIOURS LLAVE_I codigo LLAVE_D
+		| BEHAVIOURS LLAVE_I LLAVE_D {: System.err.println("ERROR: Bloque 'behaviours' vacio"); error = true; :}
+		| {: System.err.println("ERROR: Bloque 'behaviours' requerido"); error = true; :};
+
+eventos ::= EVENTS LLAVE_I evento LLAVE_D
+		| EVENTS LLAVE_I LLAVE_D {: System.err.println("ERROR: Bloque 'events' vacio"); error = true; :}
+		| {: System.err.println("ERROR: Bloque 'events' requerido"); error = true; :};
+
 evento ::= ID:id ASIGNACION PAR_I valor:r PAR_D PUNTO_COMA {: eventos_table.put(id+"", r+"");:}
-		| ID:id ASIGNACION PAR_I valor:r PAR_D PUNTO_COMA evento {: eventos_table.put(id+"", r+"");:};
+		| ID:id ASIGNACION PAR_I valor:r PAR_D PUNTO_COMA evento {: eventos_table.put(id+"", r+"");:}
+		| error {: System.err.println("ERROR en bloque 'events'."); error=true; :};
+
 valor ::= ENTRADA:en {:RESULT = en; :}
 		| ENTRADA:en COMA valor:r {:RESULT = en+","+r; :};
 
-cuerpo ::= maquinas;
+cuerpo ::= maquinas | {: System.err.println("ERROR: Sin máquinas declaradas"); error = true; :};
 
 maquinas ::= maquina | maquina maquinas;
-maquina ::= MOORE ID:id LLAVE_I cuerpo_maquina LLAVE_D {: current.setInicial(inicial); maquinas.put(id+"", current); :};
+maquina ::= MOORE ID:id LLAVE_I cuerpo_maquina LLAVE_D {: current.setInicial(inicial); maquinas.put(id+"", current); :}
+		| MOORE ID:id LLAVE_I cuerpo_maquina {: System.out.println("ERROR en máquina "+id+". Posible causa: falta '}'"); error = true; :};
+
 cuerpo_maquina ::= estados salidas transiciones;
 
-estados ::= STATES estado PUNTO_COMA;
+// Aceptaremos ambas formas
+estados ::= STATES estado PUNTO_COMA
+					| STATES PAR_I estado PAR_D PUNTO_COMA
+					| error {: System.out.println("ERROR en declaración 'states'"); error=true; :};
+
 estado ::= ID:id {: current = new Moore(); current.getEstados().add(id+""); inicial = id+"";:}
 					| ID:id COMA estado {: current.getEstados().add(id+""); inicial = id+"";:};
 
 salidas ::= OUTPUT salida PUNTO_COMA;
 salida ::= PAR_I tupla_salida PAR_D |
-					 PAR_I tupla_salida PAR_D COMA salida;
+					 PAR_I tupla_salida PAR_D COMA salida
+					 | error {: System.out.println("ERROR en declaración 'output'"); error=true; :};
 
 tupla_salida ::= ID:id1 COMA ID:id2 {: current.getSalidas().put(id1+"", id2+""); :};
 
 transiciones ::= TRANSITIONS transicion PUNTO_COMA;
 transicion ::= PAR_I tripla_transicion PAR_D
-					| PAR_I tripla_transicion PAR_D COMA transicion;
+					| PAR_I tripla_transicion PAR_D COMA transicion
+					| error {: System.out.println("ERROR en declaración 'transitions'"); error=true; :};
+
 tripla_transicion ::= ID:id1 COMA ID:id2 COMA ID:id3 {: String tran[] = {id1+"", id2+"", id3+""}; current.getTransiciones().add(tran);:};

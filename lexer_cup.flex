@@ -67,6 +67,7 @@ TAB =  \t
   {ASIGNACION}        {return symbol(sym.ASIGNACION);}
   {COMA}              {return symbol(sym.COMA);}
   {ID}                {return symbol(sym.ID, new String(yytext()));}
+  {ENTRADA}           {return symbol(sym.ENTRADA, new String(yytext()));}
   {CODIGO}            {return symbol(sym.CODIGO, new String(yytext()));}
   {NL}                {/* Obviar salto de linea */}
   {BLANCO}            {/* Obviar espacios */}
@@ -78,11 +79,23 @@ TAB =  \t
 
 <BLOQUE_EVENTOS>{
 
+  "behaviours"        {return symbol(sym.BEHAVIOURS);}
+  "code"              {return symbol(sym.CODE_TOKEN);}
+  "events"            {yybegin(BLOQUE_EVENTOS); return symbol(sym.EVENTS);}
+  "states"            {return symbol(sym.STATES);}
+  "transitions"       {return symbol(sym.TRANSITIONS);}
+  "output"            {return symbol(sym.OUTPUT);}
+  "moore"             {return symbol(sym.MOORE);}
   {LLAVE_I}           {return symbol(sym.LLAVE_I);}
   {LLAVE_D}           { yybegin(YYINITIAL); return symbol(sym.LLAVE_D);}
+  {PAR_I}             {return symbol(sym.PAR_I);}
+  {PAR_D}             {return symbol(sym.PAR_D);}
   {PUNTO_COMA}        {return symbol(sym.PUNTO_COMA);}
   {ASIGNACION}        {yybegin(EVENTO); return symbol(sym.ASIGNACION);}
+  {COMA}              {return symbol(sym.COMA);}
   {ID}                {return symbol(sym.ID, new String(yytext()));}
+  {ENTRADA}           {return symbol(sym.ENTRADA, new String(yytext()));}
+  {CODIGO}            {return symbol(sym.CODIGO, new String(yytext()));}
   {NL}                {/* Obviar salto de linea */}
   {BLANCO}            {/* Obviar espacios */}
   {TAB}               {/* Obviar tabuladores */}
@@ -93,10 +106,22 @@ TAB =  \t
 
 <EVENTO>{
 
+  "behaviours"        {return symbol(sym.BEHAVIOURS);}
+  "code"              {return symbol(sym.CODE_TOKEN);}
+  "events"            {yybegin(BLOQUE_EVENTOS); return symbol(sym.EVENTS);}
+  "states"            {return symbol(sym.STATES);}
+  "transitions"       {return symbol(sym.TRANSITIONS);}
+  "output"            {return symbol(sym.OUTPUT);}
+  "moore"             {return symbol(sym.MOORE);}
+  {LLAVE_I}           {return symbol(sym.LLAVE_I);}
+  {LLAVE_D}           { yybegin(YYINITIAL); return symbol(sym.LLAVE_D);}
   {PAR_I}             {return symbol(sym.PAR_I);}
   {PAR_D}             {yybegin(BLOQUE_EVENTOS); return symbol(sym.PAR_D);}
+  {PUNTO_COMA}        {return symbol(sym.PUNTO_COMA);}
+  {ASIGNACION}        {yybegin(EVENTO); return symbol(sym.ASIGNACION);}
   {COMA}              {return symbol(sym.COMA);}
   {ENTRADA}           {return symbol(sym.ENTRADA, new String(yytext()));}
+  {CODIGO}            {return symbol(sym.CODIGO, new String(yytext()));}
   {NL}                {/* Obviar salto de linea */}
   {BLANCO}            {/* Obviar espacios */}
   {TAB}               {/* Obviar tabuladores */}

@@ -13,7 +13,7 @@ public class MiWriter {
     LinkedList<String> estados = actual.getEstados();
     for (String estado: estados){
       if (!codigo_table.containsKey(actual.getSalidas().get(estado))){
-        System.err.println("Error: Comportamiento "+actual.getSalidas().get(estado)+" no declarado.");
+        System.err.println("MOOR ERROR: Comportamiento "+actual.getSalidas().get(estado)+" no declarado.");
         error = true;
       }
     }
@@ -22,15 +22,15 @@ public class MiWriter {
     for (String[] transicion: transiciones){
       if (!estados.contains(transicion[0])){
         error = true;
-        System.err.println("ERROR: Estado "+transicion[0]+" no declarado en transicion ["+transicion[0]+", "+transicion[1]+", "+transicion[2]+"], máquina '"+actual_n+"'");
+        System.err.println("MOOR ERROR: Estado "+transicion[0]+" no declarado en transicion ["+transicion[0]+", "+transicion[1]+", "+transicion[2]+"], máquina '"+actual_n+"'");
       }
       if (!estados.contains(transicion[1])){
         error = true;
-        System.err.println("ERROR: Estado "+transicion[1]+" no declarado en transicion ["+transicion[0]+", "+transicion[1]+", "+transicion[2]+"], máquina '"+actual_n+"'");
+        System.err.println("MOOR ERROR: Estado "+transicion[1]+" no declarado en transicion ["+transicion[0]+", "+transicion[1]+", "+transicion[2]+"], máquina '"+actual_n+"'");
       }
       if (!eventos_table.containsKey(transicion[2])) {
         error = true;
-        System.err.println("ERROR: Evento no declarado en transicion ["+transicion[0]+", "+transicion[1]+", "+transicion[2]+"], máquina '"+actual_n+"'");
+        System.err.println("MOOR ERROR: Evento no declarado en transicion ["+transicion[0]+", "+transicion[1]+", "+transicion[2]+"], máquina '"+actual_n+"'");
       }
     }
     return error;
@@ -51,15 +51,14 @@ public class MiWriter {
     write_transiciones(writer, maquina_actual, eventos_table);
     write_main(writer, maquina_actual);
     writer.close();
-
-
   }
 
   public void write_cabecera(PrintWriter writer, String actual, Hashtable<String, String> codigo_table){
     // Codigo usuario
     writer.println("# Sección código-usuario #############");
     String codigo = codigo_table.get(actual);
-    codigo = codigo.substring(2, codigo.length()-2);
+    if(codigo==null) codigo = "";
+    else codigo = codigo.substring(2, codigo.length()-2);
     writer.println(codigo);
     writer.println("######################################");
 
