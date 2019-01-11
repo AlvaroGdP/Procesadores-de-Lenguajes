@@ -20,7 +20,7 @@ maquinas : maquina | maquina maquinas;
 maquina : MOORE ID LLAVE_I cuerpo_maquina LLAVE_D;
 cuerpo_maquina : estados salidas transiciones;
 
-estados : STATES estado PUNTO_COMA;
+estados : STATES estado PUNTO_COMA | STATES PAR_I estado PAR_D PUNTO_COMA;
 estado : ID | ID COMA estado;
 
 salidas : OUTPUT salida PUNTO_COMA;

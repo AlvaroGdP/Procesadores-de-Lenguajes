@@ -7,7 +7,7 @@ public class Main {
 
   public static void main(String[] args){
     ANTLRFileStream input = null;
-    try{
+  try{
     input = new ANTLRFileStream(args[0]); // a character stream
   }catch (IOException e){
     //
