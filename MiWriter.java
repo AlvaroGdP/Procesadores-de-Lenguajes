@@ -110,7 +110,7 @@ public class MiWriter {
     entrada = procesar_entrada(entrada);
     linea = linea + entrada +":";
     writer.println(linea);
-    writer.println("\t\tnuevo_estado = '"+estado_destino+"'\n\t\tif(__debugMoor__):\n\t\t\tprint('[Transicion]\\n\\t' + estado + ', '+ str(entrada) + ' ----> ' + nuevo_estado+'\\n')\n\t\treturn nuevo_estado");
+    writer.println("\t\tnuevo_estado = '"+estado_destino+"'\n\t\tif(__debugMoor__):\n\t\t\tprint('[Transicion]\\n\\t' + estado + ', '+ str(entrada) + ' ----> ' + nuevo_estado+'\\n')\t\t\tprint('Estado actual: '+ nuevo_estado+'.\n')\n\t\treturn nuevo_estado");
 
     for (index = 1; index<actual.getTransiciones().size(); index++){
       linea = "\telif estado == '"+transiciones.get(index)[0]+"' and entrada == ";
@@ -120,7 +120,7 @@ public class MiWriter {
       entrada = procesar_entrada(entrada);
       linea = linea + entrada + ":";
       writer.println(linea);
-        writer.println("\t\tnuevo_estado = '"+estado_destino+"'\n\t\tif(__debugMoor__):\n\t\t\tprint('[Transicion]\\n\\t' + estado + ', '+ str(entrada) + ' ----> ' + nuevo_estado+'\\n')\n\t\treturn nuevo_estado");
+        writer.println("\t\tnuevo_estado = '"+estado_destino+"'\n\t\tif(__debugMoor__):\n\t\t\tprint('[Transicion]\\n\\t' + estado + ', '+ str(entrada) + ' ----> ' + nuevo_estado+'\\n')\t\t\tprint('Estado actual: '+ nuevo_estado+'.\n')\n\t\treturn nuevo_estado");
     }
     linea = "\telse:\n\t\tprint ('Transicion no definida para el estado '+ estado +' y entrada '+ str(entrada) + '. Abortando ejecución.')\n\t\tsys.exit(0)";
     writer.println(linea);
@@ -130,9 +130,9 @@ public class MiWriter {
     //Main
     String estado_inicial = actual.getInicial();
     writer.println("\ndef main():\n\t# Estado inicial\n\testado_actual = '"+estado_inicial+"'\n");
-    writer.println("\tprint('\\nEstado actual: '+ estado_actual+'.')\n\toutput(estado_actual)\n\tprint('-----\\n')\n");
+    writer.println("\tprint('\\nEstado inicial: '+ estado_actual+'.')\n\toutput(estado_actual)\n\tprint('-----\\n')\n");
     writer.println("\twhile True:\n\t\tentrada = input('Introduce la entrada para realizar la transicion: ')\n\t\tentrada = procesar_entrada(entrada)\n\t\testado_actual = transition(estado_actual, entrada)");
-    writer.println("\t\tprint('Estado actual: '+ estado_actual+'.')\n\t\toutput(estado_actual)\n\t\tprint('-----\\n')\n");
+    writer.println("\t\toutput(estado_actual)\n\t\tprint('-----\\n')\n");
     writer.println("if __name__ == '__main__':\n\tmain()");
   }
 
