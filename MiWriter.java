@@ -55,6 +55,7 @@ public class MiWriter {
 
   public void write_cabecera(PrintWriter writer, String actual, Hashtable<String, String> codigo_table){
     // Codigo usuario
+    writer.println("\n__debugMoor__ = True\n");
     writer.println("# Sección código-usuario #############");
     String codigo = codigo_table.get(actual);
     if(codigo==null) codigo = "";
@@ -63,7 +64,7 @@ public class MiWriter {
     writer.println("######################################");
 
     // procesar_entrada
-    writer.println("\nimport sys\ndef procesar_entrada(str):\n\tsplitted = str.split(',')\n\tcpy = []");
+    writer.println("\nimport sys\n\ndef procesar_entrada(str):\n\tsplitted = str.split(',')\n\tcpy = []");
     writer.println("\tfor elem in splitted:\n\t\telem = elem.replace('\\t', '')\n\t\telem = elem.replace(' ', '')");
     writer.println("\t\tcpy.append(elem)\n\treturn cpy\n\n");
   }
@@ -109,16 +110,17 @@ public class MiWriter {
     entrada = procesar_entrada(entrada);
     linea = linea + entrada +":";
     writer.println(linea);
-    writer.println("\t\tnuevo_estado = '"+estado_destino+"'\n\t\tprint('[Transicion]\\n\\t' + estado + ', '+ str(entrada) + ' ----> ' + nuevo_estado+'\\n')\n\t\treturn nuevo_estado");
+    writer.println("\t\tnuevo_estado = '"+estado_destino+"'\n\t\tif(__debugMoor__):\n\t\t\tprint('[Transicion]\\n\\t' + estado + ', '+ str(entrada) + ' ----> ' + nuevo_estado+'\\n')\n\t\treturn nuevo_estado");
 
     for (index = 1; index<actual.getTransiciones().size(); index++){
       linea = "\telif estado == '"+transiciones.get(index)[0]+"' and entrada == ";
+      entrada_id = transiciones.get(index)[2];
       entrada = eventos_table.get(entrada_id);
       estado_destino = transiciones.get(index)[1];
       entrada = procesar_entrada(entrada);
       linea = linea + entrada + ":";
       writer.println(linea);
-        writer.println("\t\tnuevo_estado = '"+estado_destino+"'\n\t\tprint('[Transicion]\\n\\t' + estado + ', '+ str(entrada) + ' ----> ' + nuevo_estado+'\\n')\n\t\treturn nuevo_estado");
+        writer.println("\t\tnuevo_estado = '"+estado_destino+"'\n\t\tif(__debugMoor__):\n\t\t\tprint('[Transicion]\\n\\t' + estado + ', '+ str(entrada) + ' ----> ' + nuevo_estado+'\\n')\n\t\treturn nuevo_estado");
     }
     linea = "\telse:\n\t\tprint ('Transicion no definida para el estado '+ estado +' y entrada '+ str(entrada) + '. Abortando ejecución.')\n\t\tsys.exit(0)";
     writer.println(linea);
