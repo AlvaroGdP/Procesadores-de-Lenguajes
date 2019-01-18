@@ -13,7 +13,7 @@ public class MiWriter {
     LinkedList<String> estados = actual.getEstados();
     for (String estado: estados){
       if (!codigo_table.containsKey(actual.getSalidas().get(estado))){
-        System.err.println("MOOR ERROR: Comportamiento "+actual.getSalidas().get(estado)+" no declarado.");
+        System.err.println("MOOR ERROR: Comportamiento '"+actual.getSalidas().get(estado)+"' no declarado, máquina '"+actual_n+"'");
         error = true;
       }
     }
@@ -22,11 +22,11 @@ public class MiWriter {
     for (String[] transicion: transiciones){
       if (!estados.contains(transicion[0])){
         error = true;
-        System.err.println("MOOR ERROR: Estado "+transicion[0]+" no declarado en transicion ["+transicion[0]+", "+transicion[1]+", "+transicion[2]+"], máquina '"+actual_n+"'");
+        System.err.println("MOOR ERROR: Estado '"+transicion[0]+"' no declarado en transicion ["+transicion[0]+", "+transicion[1]+", "+transicion[2]+"], máquina '"+actual_n+"'");
       }
       if (!estados.contains(transicion[1])){
         error = true;
-        System.err.println("MOOR ERROR: Estado "+transicion[1]+" no declarado en transicion ["+transicion[0]+", "+transicion[1]+", "+transicion[2]+"], máquina '"+actual_n+"'");
+        System.err.println("MOOR ERROR: Estado '"+transicion[1]+"' no declarado en transicion ["+transicion[0]+", "+transicion[1]+", "+transicion[2]+"], máquina '"+actual_n+"'");
       }
       if (!eventos_table.containsKey(transicion[2])) {
         error = true;
@@ -110,7 +110,7 @@ public class MiWriter {
     entrada = procesar_entrada(entrada);
     linea = linea + entrada +":";
     writer.println(linea);
-    writer.println("\t\tnuevo_estado = '"+estado_destino+"'\n\t\tif(__debugMoor__):\n\t\t\tprint('[Transicion]\\n\\t' + estado + ', '+ str(entrada) + ' ----> ' + nuevo_estado+'\\n')\t\t\tprint('Estado actual: '+ nuevo_estado+'.\n')\n\t\treturn nuevo_estado");
+    writer.println("\t\tnuevo_estado = '"+estado_destino+"'\n\t\tif(__debugMoor__):\n\t\t\tprint('[Transicion]\\n\\t' + estado + ', '+ str(entrada) + ' ----> ' + nuevo_estado)\n\t\t\tprint('Estado actual: '+ nuevo_estado+'.\n')\n\t\treturn nuevo_estado");
 
     for (index = 1; index<actual.getTransiciones().size(); index++){
       linea = "\telif estado == '"+transiciones.get(index)[0]+"' and entrada == ";
@@ -120,7 +120,7 @@ public class MiWriter {
       entrada = procesar_entrada(entrada);
       linea = linea + entrada + ":";
       writer.println(linea);
-        writer.println("\t\tnuevo_estado = '"+estado_destino+"'\n\t\tif(__debugMoor__):\n\t\t\tprint('[Transicion]\\n\\t' + estado + ', '+ str(entrada) + ' ----> ' + nuevo_estado+'\\n')\t\t\tprint('Estado actual: '+ nuevo_estado+'.\n')\n\t\treturn nuevo_estado");
+        writer.println("\t\tnuevo_estado = '"+estado_destino+"'\n\t\tif(__debugMoor__):\n\t\t\tprint('[Transicion]\\n\\t' + estado + ', '+ str(entrada) + ' ----> ' + nuevo_estado)\n\t\t\tprint('Estado actual: '+ nuevo_estado+'.\n')\n\t\treturn nuevo_estado");
     }
     linea = "\telse:\n\t\tprint ('Transicion no definida para el estado '+ estado +' y entrada '+ str(entrada) + '. Abortando ejecución.')\n\t\tsys.exit(0)";
     writer.println(linea);
