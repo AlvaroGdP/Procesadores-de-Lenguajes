@@ -3,8 +3,8 @@ options {tokenVocab = Moor_Lex;}
 
 programa : bloque_code comportamientos eventos maquinas;
 
-bloque_code : (CODE_TOKEN LLAVE_I codigo_bloque LLAVE_D);
-codigo_bloque : (codigo_individual codigo_bloque | codigo_individual);
+bloque_code : CODE_TOKEN LLAVE_I codigo_bloque LLAVE_D | CODE_TOKEN LLAVE_I LLAVE_D | ;
+codigo_bloque : codigo_individual codigo_bloque | codigo_individual;
 codigo_individual : ID ASIGNACION CODIGO;
 
 comportamientos : BEHAVIOURS LLAVE_I comportamiento LLAVE_D;
