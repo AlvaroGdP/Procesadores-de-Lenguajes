@@ -125,6 +125,7 @@ TAB =  \t
   {NL}                {/* Obviar salto de linea */}
   {BLANCO}            {/* Obviar espacios */}
   {TAB}               {/* Obviar tabuladores */}
+  {COMENTARIO}        {/* Obviar comentarios */}
   .                   {System.err.println("ERROR: Token Desconocido<" + yytext() +">: encontrado en linea: " + (yyline+1) + " columna: " + (yycolumn+1));}
 
 }
